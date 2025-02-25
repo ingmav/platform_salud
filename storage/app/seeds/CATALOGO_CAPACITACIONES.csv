@@ -1,0 +1,64 @@
+ID,tipo,Norma o Materia,Capacitación
+1,1,NOM-001-STPS-2008,Orden y limpieza (Metodología 5s).
+2,1,NOM-002-STPS-2010,Uso y manejo de extintores.
+3,1,NOM-002-STPS-2010,Plan de atención a emergencias de incendio.
+4,1,NOM-002-STPS-2010,Primeros auxilios.
+5,1,NOM-002-STPS-2010,Evacuación de inmuebles.
+6,1,NOM-002-STPS-2010,Búsqueda y rescate.
+7,1,NOM-002-STPS-2010,Brigada de prevención y reducción de riesgos.
+8,1,NOM-002-STPS-2010,Propiedades y manejo de  gas L.P.
+9,1,NOM-004-STPS-1998,Operación segura de la maquinaria y equipo.
+10,1,NOM-004-STPS-1998,Bloqueo y etiquetado.
+11,1,NOM-004-STPS-1998,Plan de atención a emergencias en accidentes de maquinaria y equipo.
+12,1,NOM-005-STPS-1999,Manejo| Transporte y Almacenamiento de Sustancias Químicas Peligrosas.
+13,1,NOM-005-STPS-1999,Plan de atención a emergencias en accidentes de sustancias químicas peligrosas.
+14,1,NOM-006-STPS-2023,Condiciones generales de seguridad y salud en el trabajo en las actividades de almacenamiento y manejo de materiales.
+15,1,NOM-006-STPS-2023,Prevención de riesgos en el almacenamiento y manejo de materiales a través del uso de maquinaria: polipastos| apilador| bandas de transporte.
+16,1,NOM-006-STPS-2023,Plan de atención a emergencias en accidentes de manejo y almacenamiento de materiales.
+17,1,NOM-009-STPS-2011,Trabajo en alturas: sistemas personales para trabajos en altura.
+18,1,NOM-009-STPS-2011,Trabajo en alturas: uso de andamios y escaleras.
+19,1,NOM-009-STPS-2011,Plan de atención a emergencias en accidentes de trabajos en alturas.
+20,1,NOM-011-STPS-2011,Medidas de control: los efectos a la salud| niveles máximos permisibles de exposición| medidas de protección y de exámenes audiométricos y sitios de trabajo que presenten condiciones críticas de exposición.
+21,1,NOM-015-STPS-2001,Niveles máximos permisibles y las medidas de control para actividades con condiciones térmicas elevadas.
+22,1,NOM-017-STPS-2008,Uso| revisión| reposición| limpieza| limitaciones| mantenimiento| resguardo y disposición final del equipo de protección personal| con base en las indicaciones| instrucciones o procedimientos que elabore el fabricante de tal equipo de protección personal.
+23,1,NOM-018-STPS-2015,El contenido de las hojas de datos de seguridad y de la señalización.
+24,1,NOM-019-STPS-2011,Comisión mixta de seguridad e higiene.
+25,1,NOM-019-STPS-2011,Seguridad e Higiene.
+26,1,NOM-020-STPS-2011,Operación| mantenimiento| reparación y pruebas de presión de recipientes sujetos a presión.
+27,1,NOM-020-STPS-2012,Plan de atención a emergencias a equipos sujetos a presión.
+28,1,NOM-022-STPS-2008,Técnicas para descargar o evitar la generación y acumulación de electricidad estática y los riesgos que representan.
+29,1,NOM-025-STPS-2008,Riesgos que puede provocar un deslumbramiento o un nivel deficiente de iluminación en sus áreas o puestos de trabajo.
+30,1,NOM-026-STPS-2008,Interpretación de los elementos de señalización del centro de trabajo.
+31,1,NOM-027-STPS-2008,Procedimientos de seguridad en la soldadura y corte.
+32,1,NOM-027-STPS-2008,Mantenimiento preventivo y correctivo al equipo y maquinaria utilizada en las actividades de soldadura y corte.
+33,1,NOM-027-STPS-2008,Plan de atención a emergencias.
+34,1,NOM-029-STPS-2011,Procedimientos de seguridad para mantenimiento de instalaciones eléctricas.
+35,1,NOM-029-STPS-2011,Plan de atención a emergencias.
+36,1,NOM-30-STPS-2009,Funciones y actividades que establece la NOM-030-STPS-2009.
+37,1,NOM-30-STPS-2009,Mecanismos de respuesta inmediata cuando se detecte un riesgo grave e inminente.
+38,1,NOM-30-STPS-2009,Prevención de adicciones y buenos hábitos.
+39,1,NOM-035-STPS-2018,Riesgo psicosocial.
+40,1,NOM-035-STPS-2018,Acoso laboral Mobbing.
+41,1,NOM-035-STPS-2018,Igualdad de género.
+42,1,NOM-035-STPS-2018,No a la Discriminación.
+43,1,NOM-036-1-STPS-2018,Ergonomía.
+44,2,ACUERDO,Planes y obligaciones en materia de capacitación y adiestramiento.
+45,3,Programa Interno de Protección Civil.,Protocolos de atención a emergencias.
+46,4,Simulacro de incendio,Ejecución de simulacro de incendio.
+47,4,Simulacro de emergencia médica,Ejecución de simulacro de emergencia médica.
+48,4,Simulacro de sismo,Ejecución de simulacro de sismo.
+49,4,Simulacro de emergencias ambientales: derrame de residuos peligrosos,Ejecución de simulacro de emergencias ambientales: derrame de residuos peligrosos.
+50,5,Aire,Operación y mantenimiento de equipo emisor de contaminantes a la atmósfera.
+51,5,Aire,Reporte de Gases de Efecto Invernadero (GEI).
+52,5,Ruido,Límites máximos permisibles de emisión de ruido de las fuentes fijas.
+53,5,Agua,Uso y ahorro eficiente del agua.
+54,5,Suelo y subsuelo,Prevención de la contaminación al suelo.
+55,5,Residuos Peligrosos (RP),Manejo integral de residuos: Residuos Peligrosos.
+56,5,Residuos Peligrosos (RP),Plan de manejo de residuos peligrosos.
+57,5,Residuos Sólidos Urbanos (RSU),Manejo integral de residuos: Residuos Sólidos Urbano (RSU).
+58,5,Residuos de Manejo Especial (RME),Manejo integral de residuos: Residuos de Manejo Especial (RME).
+59,5,Residuos de Manejo Especial (RME),Plan de manejo de residuos sólidos urbanos| de manejo especial y no peligrosos
+60,5,Energía,Uso y ahorro eficiente de energía.
+61,5,Riesgo ambiental y emergencias ambientales,Atención a emergencias ambientales.
+62,5,Trabajo con la comunidad,Trabajo Social Comunitario.
+63,5,Gestión ambiental,Sistemas de gestión ambiental.
