@@ -17,6 +17,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Permission;
 use App\Models\Role;
+use App\Models\Informacion\RelUserSubTema;
 
 use DB;
 
@@ -236,6 +237,13 @@ class UserController extends Controller{
                     $permisos = [];
                 }
 
+                $subtemas = [];
+                foreach ($parametros['catalogo_subtema_id'] as $key => $value) {
+                    $rel = new RelUserSubTema();
+                    $rel->user_id =  $usuario->id;
+                    $rel->catalogo_subtema_id = $value;
+                    $rel->save();
+                }
                 $usuario->roles()->sync($roles);
                 $usuario->permissions()->sync($permisos);
 
@@ -269,7 +277,7 @@ class UserController extends Controller{
      */
     public function show($id){
         try{
-            $usuario = User::with('roles','permissions')->find($id);
+            $usuario = User::with('roles','permissions','relSubTema.subTema')->find($id);
             if(!$usuario){
                 return response()->json(['mensaje' => 'No se encontró el usuario seleccionado'], HttpResponse::HTTP_CONFLICT);
             }

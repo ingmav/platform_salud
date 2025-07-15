@@ -15,6 +15,7 @@ import { CustomValidator } from 'src/app/utils/classes/custom-validator';
 import { DialogConfirmActionComponent } from 'src/app/shared/components/dialog-confirm-action/dialog-confirm-action.component';
 import { TabPermissionsComponent } from '../inner-components/tab-permissions/tab-permissions.component';
 import { TabRolesComponent } from '../inner-components/tab-roles/tab-roles.component';
+import { RestService } from 'src/app/shared/rest/rest.service';
 
 export interface DialogData {
   id: number;
@@ -36,6 +37,7 @@ export class DialogoUsuarioComponent implements OnInit, OnDestroy {
     public dialogRef: MatDialogRef<DialogoUsuarioComponent>,
     @Inject(MAT_DIALOG_DATA) public inData: DialogData,
     private formBuilder: FormBuilder,
+    private rest: RestService,
     private usuariosService: UsuariosService,
     private breakpointObserver: BreakpointObserver,
     public dialog: MatDialog,
@@ -72,6 +74,8 @@ export class DialogoUsuarioComponent implements OnInit, OnDestroy {
   isSaving:boolean;
   isSendingEmail:boolean;
   dialogMaxSize:boolean;
+  departamentos:any = [];
+  subtemas:any = [];
 
   isRoot:boolean;
 
@@ -93,6 +97,7 @@ export class DialogoUsuarioComponent implements OnInit, OnDestroy {
   lastLogin:any;
 
   listaGrupos:any[];
+  listaTema:any[] = [];
 
   ngOnInit(): void {
     this.savedData = false;
@@ -111,6 +116,8 @@ export class DialogoUsuarioComponent implements OnInit, OnDestroy {
       'name':                       ['',Validators.required],
       'email':                      ['',[Validators.required, Validators.email]],
       'username':                   ['',[Validators.required, Validators.minLength(4)]],
+      'catalogo_departamento_id':   ['',[Validators.required]],
+      'catalogo_subtema_id':        ['',[Validators.required]],
       'avatar':                     [this.selectedAvatar],
       'status':                     [''],
       'mail_password':              [true],
@@ -122,6 +129,8 @@ export class DialogoUsuarioComponent implements OnInit, OnDestroy {
     this.usuariosService.obtenerCatalogosUsuarios().subscribe({
       next: (response:any) => {
         let catalogos:any = response.data;
+        
+        
 
         this.listaGrupos = response.data.grupos;
 
@@ -160,6 +169,16 @@ export class DialogoUsuarioComponent implements OnInit, OnDestroy {
               this.statusUser = response.data.status;
               this.lastLogin = response.data.last_login_at;
               this.isLoading = false;
+              
+              response.data.rel_sub_tema.forEach(element => {
+                this.listaTema.push(element.catalogo_subtema_id);
+              });
+
+              if(response.data.rel_sub_tema.length > 0){
+                let depto = response.data.rel_sub_tema[0].sub_tema.catalogo_departamento_id;
+                this.formUsuario.patchValue({ catalogo_departamento_id: depto });
+                this.select_detpo(depto);
+              }
             },
             error: (response:any)=>{
               this.alertPanel.showError(response.error.message);
@@ -176,6 +195,8 @@ export class DialogoUsuarioComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       }
     })
+
+    this.cargarDepartamento();
   }
 
   ngAfterViewInit(){
@@ -192,6 +213,18 @@ export class DialogoUsuarioComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroyed.next();
     this.destroyed.complete();
+  }
+
+  seleccionOpcion(valor)
+  {
+    let indice = this.listaTema.indexOf(valor);
+    
+    if(indice == -1)
+    {
+      this.listaTema.push(valor);
+    }else{
+      this.listaTema.splice(indice, 1);
+    }
   }
 
   setConfigForm(){
@@ -267,6 +300,7 @@ export class DialogoUsuarioComponent implements OnInit, OnDestroy {
       }
     });
   };
+
 
   guardarUsuario(status?:number){
     this.alertPanel.closePanel();
@@ -370,7 +404,8 @@ export class DialogoUsuarioComponent implements OnInit, OnDestroy {
       });
     }
   }
-    
+   
+  
   addFromRole(role){
     this.tabPermissions.insertRolePermissions(role);
   }
@@ -390,6 +425,26 @@ export class DialogoUsuarioComponent implements OnInit, OnDestroy {
     if(!event){
       this.formUsuario.get('password').setErrors({'lowstrenght':true});
     }
+  }
+
+  cargarDepartamento()
+    {
+      return this.rest.get("departamento",{}).subscribe({
+        next:(response:any) => {
+          this.departamentos = response.data;
+        },
+        error:(response:any) => {
+          this.alertPanel.showError(response.error.message);
+          
+        }
+      });
+    }
+
+  select_detpo(id:number) {
+    let obj = this.departamentos.find(x => x.id == id);
+    this.subtemas =  obj.sub_tema;
+    console.log(this.listaTema);
+    this.formUsuario.patchValue({catalogo_subtema_id:this.listaTema});
   }
 
   resizeDialog(){
