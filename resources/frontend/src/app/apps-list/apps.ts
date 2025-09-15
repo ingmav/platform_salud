@@ -60,7 +60,7 @@ export const APPS: App[] = [
         name: 'INFORMACIÓN', route: "informacion", icon: "assets/icons/informacion.png", permission: "rdhSQ68TQgDiUY6xbR1zXyzW55IdFhee",
     },
     {
-        name: 'DAHSBOARD', route: "dashboard", icon: "assets/icons/reportes.jpg", permission: "YPizS0t9mHsg7licGlGiGUxlXhztHKGw",
+        name: 'DAHSBOARD', route: "dashboard", icon: "assets/icons/dashboard.png", permission: "YPizS0t9mHsg7licGlGiGUxlXhztHKGw",
     }
 
 ]

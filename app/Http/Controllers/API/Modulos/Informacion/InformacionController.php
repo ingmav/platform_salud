@@ -1,14 +1,14 @@
 <?php
-
 namespace App\Http\Controllers\API\Modulos\Informacion;
 
+use App\Http\Controllers\Controller;
+use App\Models\Informacion\Departamento;
+use App\Models\Informacion\Informacion;
+use App\Models\Informacion\SubTema;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
-use App\Http\Controllers\Controller;
-
-use Validator, DB;
-
-use App\Models\Informacion\Informacion;
+use Validator;
 
 class InformacionController extends Controller
 {
@@ -18,11 +18,10 @@ class InformacionController extends Controller
             $loggedUser = auth()->userOrFail();
 
             $parametros = $request->all();
-            $obj = Informacion::with("subTema.departamento", "user");
+            $obj        = Informacion::with("subTema.departamento", "user");
 
-            if($loggedUser->is_superuser != 1)
-            {
-                $obj->whereRaw("catalogo_subtema_id in (select catalogo_subtema_id from rel_user_subtema where user_id=".$loggedUser->id.")");
+            if ($loggedUser->is_superuser != 1) {
+                $obj->whereRaw("catalogo_subtema_id in (select catalogo_subtema_id from rel_user_subtema where user_id=" . $loggedUser->id . ")");
             }
 
             if (isset($parametros['query']) && $parametros['query']) {
@@ -51,7 +50,6 @@ class InformacionController extends Controller
         }
     }
 
-
     public function Store(Request $request)
     {
         ini_set('memory_limit', '-1');
@@ -59,51 +57,56 @@ class InformacionController extends Controller
         $mensajes = [
 
             'required' => "required",
-            'email' => "email",
-            'unique' => "unique"
+            'email'    => "email",
+            'unique'   => "unique",
         ];
         $inputs = $request->all();
         $reglas = [
             'catalogo_subtema_id' => 'required',
-            'descripcion' => 'required',
+            'descripcion'         => 'required',
         ];
-
 
         try {
             $parametros = $request->all();
+
             //$parametros = $parametros['params'];
             $resultado = Validator::make($inputs, $reglas, $mensajes);
-
+            
             \Storage::makeDirectory("public\informacion");
             if ($resultado->passes()) {
-                $obj = new Informacion();
+                $usuario = auth()->userOrFail();
+                if ((int)$inputs['id'] != 0) {
+                    $obj = Informacion::find($inputs['id']);
+                } else {
+                    $obj = new Informacion();
+                    $obj->user_id             = $usuario->id;
+                }
+
+                DB::beginTransaction();
 
                 if ($request->hasFile('archivo')) {
-                    DB::beginTransaction();
-                    $usuario = auth()->userOrFail();
-
-
                     $file = $request->File('archivo');
+
                     $extension = $file->getClientOriginalExtension();
-
-
-                    $obj->catalogo_subtema_id = strtoupper($inputs['catalogo_subtema_id']);
-                    $obj->user_id = $usuario->id;
-                    $obj->nombre_archivo = strtoupper($inputs['descripcion']);
-                    $obj->extension = $extension;
-
-                    $obj->save();
-
                     $fileName = $obj->id;
-                    $name = $fileName . "." . $extension;
-                    $request->file("archivo")->storeAs("public/informacion", $obj->id.".".$obj->extension);
-                    $tamano = $file->getSize();
-                    $type = $file->getClientMimeType();
+                    $name     = $fileName . "." . $extension;
+                    $request->file("archivo")->storeAs("public/informacion", $obj->id . "." . $obj->extension);
+                    $tamano    = $file->getSize();
+                    $type      = $file->getClientMimeType();
                     $obj->peso = ($tamano / 1000000);
                     $obj->type = $type;
+                    $obj->extension           = $extension;
                     $obj->save();
-                    DB::commit();
+
                 }
+
+                $obj->catalogo_subtema_id = strtoupper($inputs['catalogo_subtema_id']);
+                $obj->nombre_archivo      = strtoupper($inputs['descripcion']);
+
+                $obj->save();
+
+                DB::commit();
+
                 return response()->json(['data' => $obj], HttpResponse::HTTP_OK);
             } else {
                 return response()->json(['mensaje' => 'Error en los datos del formulario', 'validacion' => $resultado->passes(), 'errores' => $resultado->errors()], HttpResponse::HTTP_CONFLICT);
@@ -114,6 +117,7 @@ class InformacionController extends Controller
             return response()->json(['error' => ['message' => $e->getMessage(), 'line' => $e->getLine()]], HttpResponse::HTTP_CONFLICT);
         }
     }
+
     public function destroy($id)
     {
         try {
@@ -126,14 +130,56 @@ class InformacionController extends Controller
         }
     }
 
-    public function Download(Request $reques, $id)
+    public function DownloadRequest($reques, $id)
     {
 
         ini_set('memory_limit', '-1');
 
         try {
             $obj = Informacion::find($id);
-            return \Storage::download("public//informacion//" . $id . ".".$obj->extension);
+            return \Storage::download("public//informacion//" . $id . "." . $obj->extension);
+        } catch (\Exception $e) {
+            return response()->json(['error' => ['message' => $e->getMessage(), 'line' => $e->getLine()]], HttpResponse::HTTP_CONFLICT);
+        }
+    }
+
+    public function Catalogos(Request $reques)
+    {
+        try {
+            $loggedUser = auth()->userOrFail();
+            if ($loggedUser->is_superuser == 1) {
+                $depto = Departamento::where("catalogo_departamento.seleccionable", 1)->get();
+            } else {
+                $depto = Departamento::join("catalogo_subtema", "catalogo_subtema.catalogo_departamento_id", "catalogo_departamento.id")
+                    ->join("rel_user_subtema", "rel_user_subtema.catalogo_subtema_id", "catalogo_subtema.id")
+                    ->where("rel_user_subtema.user_id", $loggedUser->id)
+                    ->where("catalogo_departamento.seleccionable", 1)
+                    ->get();
+            }
+            return response()->json(['data' => $depto], HttpResponse::HTTP_OK);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => ['message' => $e->getMessage(), 'line' => $e->getLine()]], HttpResponse::HTTP_CONFLICT);
+        }
+    }
+    public function subTema(Request $request)
+    {
+        try {
+            $parametros = $request->all();
+            $loggedUser = auth()->userOrFail();
+
+            if ($loggedUser->is_superuser == 1) {
+                $subTema = SubTema::where("catalogo_subtema.catalogo_departamento_id", $parametros['params'])
+                    ->get();
+            } else {
+                $subTema = SubTema::join("rel_user_subtema", "rel_user_subtema.catalogo_subtema_id", "catalogo_subtema.id")
+                    ->where("rel_user_subtema.user_id", $loggedUser->id)
+                    ->where("catalogo_subtema.catalogo_departamento_id", $parametros['params'])
+                    ->get();
+            }
+
+            return response()->json(['data' => $subTema], HttpResponse::HTTP_OK);
+
         } catch (\Exception $e) {
             return response()->json(['error' => ['message' => $e->getMessage(), 'line' => $e->getLine()]], HttpResponse::HTTP_CONFLICT);
         }

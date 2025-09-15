@@ -50,7 +50,9 @@ Route::group(['middleware'=>'auth'],function($router){
     Route::apiResource('role',                      'API\Admin\RoleController');
     Route::apiResource('informacion',               'API\Modulos\Informacion\InformacionController');
     Route::apiResource('departamento',               'API\Modulos\Informacion\DepartamentoController')->only(["index"]);
+    Route::get('sub-tema',               'API\Modulos\Informacion\InformacionController@subTema');
     Route::get('documento/{id}',                 'API\Modulos\Informacion\InformacionController@Download');
+    Route::get('user-temas',                    'API\Modulos\Informacion\InformacionController@Catalogos');
     
     Route::get('acumulado-departamento',                 'API\Modulos\Informacion\ReporteController@Acumulado');
 });
