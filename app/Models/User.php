@@ -78,6 +78,10 @@ class User extends Authenticatable implements JWTSubject{
     public function permissions(){
         return $this->belongsToMany('App\Models\Permission')->withPivot('status');
     }
+
+    public function relSubTema(){
+        return $this->hasMany('App\Models\Informacion\RelUserSubTema');
+    }
     /**********************************************************  End: Relationships Functions  **********************************************************/
 
     //Funciones para creación de token para envio de correo

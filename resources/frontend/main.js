@@ -4,7 +4,7 @@ const { autoUpdater } = require('electron-updater');
 
 let mainWindow;
 
-const feedURL = 'https://your-update-server.com'; // URL de tu servidor de actualizaciones
+const feedURL = 'https://github.com/ingmav/platform_salud/releases/tag/primer_tag'; // URL de tu servidor de actualizaciones
 
 autoUpdater.setFeedURL({ url: feedURL });
 

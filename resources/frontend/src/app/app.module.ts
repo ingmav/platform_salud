@@ -37,6 +37,8 @@ import { ControlAccesoModule } from './modulos/control-acceso/control-acceso.mod
 //Para el Lenguaje de las Fechas
 import { registerLocaleData } from '@angular/common';
 import locale from '@angular/common/locales/es-MX';
+import { InformacionModule } from './modulos/informacion/informacion.module';
+import { DashboardModule } from './modulos/dashboard/dashboard.module';
 
 
 registerLocaleData(locale);
@@ -61,6 +63,8 @@ registerLocaleData(locale);
     DevToolsModule,
     AppRoutingModule,
     ControlAccesoModule,
+    InformacionModule,
+    DashboardModule,
     WildcardRoutingModule,
   ],
   providers: [

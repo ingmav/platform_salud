@@ -8,7 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
-    "electron": "ng build --prod && electron ."
+    "electron": "ng build --prod && electron .",
+    "dist": "electron-builder"
   },
   "private": true,
   "dependencies": {
@@ -23,9 +24,12 @@
     "@angular/platform-browser": "^17.0.4",
     "@angular/platform-browser-dynamic": "^17.0.4",
     "@angular/router": "^17.0.4",
+    "@types/highcharts": "^7.0.0",
+    "angular-highcharts": "^17.0.1",
     "electron-updater": "^6.3.9",
     "file-saver": "^2.0.5",
-    "ngx-image-cropper": "^7.2.1",
+    "highcharts": "^12.2.0",
+    "highcharts-angular": "^4.0.1",
     "pdfmake": "^0.2.7",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
@@ -46,5 +50,19 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
     "typescript": "5.2"
+  },
+  "build": {
+    "appId": "com.mi-aplicacion",
+    "productName": "Mi Aplicación",
+    "publish": {
+      "provider": "generic",
+      "url": "https://github.com/ingmav/platform_salud/releases/tag/primer_tag"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "mac": {
+      "target": "dmg"
+    }
   }
 }
