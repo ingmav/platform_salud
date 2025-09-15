@@ -301,6 +301,7 @@ export class DialogoUsuarioComponent implements OnInit, OnDestroy {
     });
   };
 
+
   guardarUsuario(status?:number){
     this.alertPanel.closePanel();
     if(this.formUsuario.valid || status){

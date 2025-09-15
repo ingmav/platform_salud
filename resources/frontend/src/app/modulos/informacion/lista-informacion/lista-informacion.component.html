@@ -1,0 +1,112 @@
+<div class="flex-row flex-gap module-search-bar">
+    <mat-form-field class="flex-fill" appearance="fill">
+        <mat-label>Buscar</mat-label>
+        <input matInput [(ngModel)]="searchQuery" (keyup.escape)="cleanSearch()" (keyup.enter)="applySearch()"
+            placeholder="Buscar usuario" autocomplete="off">
+        <button matSuffix *ngIf="searchQuery" mat-icon-button (click)="cleanSearch()" [attr.aria-label]="'Clean Query'"
+            [attr.aria-pressed]="'cleanQuery'">
+            <mat-icon>close</mat-icon>
+        </button>
+        <button mat-icon-button matSuffix (click)="applySearch()">
+            <mat-icon>search</mat-icon>
+        </button>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="openDialogUser()"
+        [matTooltip]="'Nuevo Usuario'"><mat-icon>add</mat-icon></button>
+</div>
+
+<div>
+    <alert-panel></alert-panel>
+    <mat-progress-bar *ngIf="isLoadingPDF" mode="query"></mat-progress-bar>
+</div>
+
+<mat-card class="table-card flex-fill">
+    <div class="flex-column" style="height: 100%;">
+        <div class="main-list-table left-click-open flex-fill">
+            <table mat-table [dataSource]="data" matSort matSortActive="updated_at" matSortDirection="desc">
+                <ng-container matColumnDef="NOMBRE">
+                    <th mat-header-cell *matHeaderCellDef>NOMBRE</th>
+                    <td mat-cell *matCellDef="let row">
+                        {{ row.nombre_archivo }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="DEPARTAMENTO">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>DEPARTAMENTO</th>
+                    <td mat-cell *matCellDef="let row">
+                        {{row.sub_tema.descripcion}}
+                        <div>{{ row.sub_tema.departamento.descripcion }}</div>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="ARCHIVO">
+                    <th mat-header-cell *matHeaderCellDef class="hide-xs">ARCHIVO</th>
+                    <td mat-cell *matCellDef="let row" class="hide-xs">
+                        {{ row.nombre_archivo }}.{{ row.extension }}
+                        <div>{{ row.peso }} mb.</div>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="VISTA">
+                    <th mat-header-cell *matHeaderCellDef class="hide-sm hide-xs"></th>
+                    <td mat-cell *matCellDef="let row" class="hide-sm hide-xs">
+                        <button mat-icon-button (click)="cargarDocumento(row)">
+                            <mat-icon>remove_red_eye</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="CREADO_AL">
+                    <th style="white-space: nowrap;" mat-header-cell *matHeaderCellDef mat-sort-header>CREADO AL</th>
+                    <td mat-cell *matCellDef="let row" style="white-space: nowrap; text-align: center;">
+                        <span *ngIf="!row.created_at">Nunca</span>
+                        <span *ngIf="row.created_at">
+                            {{ row.user.name }}
+                            <div>{{row.created_at | date:'dd - MMM - y'}}</div>
+                            <!-- {{row.created_at | date:'h:mm a'}} -->
+                        </span>
+                    </td>
+                </ng-container>
+
+
+
+                <ng-container matColumnDef="loadingResults">
+                    <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length"
+                        class="no-results-found">
+                        --| Cargando Registros |--
+                        <mat-progress-bar mode="query"></mat-progress-bar>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="noResultsFound">
+                    <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length"
+                        class="no-results-found">
+                        No se encontraron registros
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                    [cdkContextMenuTriggerFor]="rowMenu" [cdkContextMenuTriggerData]="{id:row.id,row:row}">
+                </tr>
+                <tr mat-footer-row *matFooterRowDef="['loadingResults']" [ngClass]="{'hide':!isLoadingResults}"></tr>
+                <tr mat-footer-row *matFooterRowDef="['noResultsFound']"
+                    [ngClass]="{'hide':!(data!=null && data.length==0 && !isLoadingResults)}"></tr>
+            </table>
+        </div>
+        <div>
+            <mat-paginator [length]="resultsLength" [pageSize]="pageSize" [pageSizeOptions]="[25, 50, 100]"
+                showFirstLastButtons aria-label="Selecciona una página"></mat-paginator>
+        </div>
+    </div>
+</mat-card>
+
+<ng-template #rowMenu let-id="id" let-row="row">
+    <div class="context-menu mat-elevation-z2" cdkMenu>
+        <!-- <button class="context-menu-item" cdkMenuItem
+            (click)="openDialogUser(row)"><mat-icon>edit</mat-icon>&nbsp;EDITAR</button> -->
+        <button class="context-menu-item" cdkMenuItem
+            (click)="eliminarRegistro(id)"><mat-icon>delete</mat-icon>&nbsp;ELIMINAR</button>
+    </div>
+</ng-template>

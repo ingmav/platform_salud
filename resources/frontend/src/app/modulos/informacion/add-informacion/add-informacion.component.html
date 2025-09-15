@@ -1,0 +1,96 @@
+<section class="flex-column" style="height: 100%; overflow: hidden; flex: 1 1 0%;"
+    (document:keydown.escape)="cancelarAccion()"> <!-- Main Body <<<<<<< -->
+    <section class="dialog-toolbar"> <!-- Toolbar Menu <<<<<<< -->
+        <div class="flex-row">
+
+            <div class="label-info">
+                Nuevo
+            </div>
+
+            <button mat-button (click)="guardar()" [disabled]="isLoading || isSaving || !Form.valid">
+                <mat-icon>{{(changesDetected)?'save_as':'save'}}</mat-icon><span class="hide-xs">&nbsp;Guardar</span>
+            </button>
+
+            <div class="flex-fill"></div>
+
+            <div class="label-info screen-size-icon" *ngIf="currentScreenSize == 'xs' || currentScreenSize == 'sm'">
+                <mat-icon>phone_iphone</mat-icon>
+            </div>
+
+            <button mat-button class="boton-accion" (click)="resizeDialog()"
+                [matTooltip]="(dialogMaxSize)?'Restaurar':'Maximizar'" [matTooltipPosition]="'left'" tabindex="-1"
+                *ngIf="currentScreenSize != 'xs' && currentScreenSize != 'sm'">
+                <mat-icon>{{(dialogMaxSize)?'fit_screen':'fullscreen'}}</mat-icon>
+            </button>
+            <button class="boton-accion boton-cerrar" mat-button (click)="cerrar()"
+                tabindex="-1"><mat-icon>close</mat-icon></button>
+        </div>
+    </section> <!-- <<<<<<< Toolbar Menu -->
+    <mat-progress-bar *ngIf="isLoading || isSaving" [mode]="(isSaving)?'indeterminate':'query'"
+        [color]="(isSaving)?'accent':'primary'"></mat-progress-bar>
+    <section>
+        <alert-panel></alert-panel>
+    </section>
+    <section class="flex-fill flex-column" style="padding:8px; overflow: auto;">
+        <div class="flex-fill flex-column flex-gap">
+            <mat-card class="flex-column flex-gap xs-max-height-user-form" style="padding: 8px;" [formGroup]="Form">
+                <div class="flex-row flex-xs-column flex-fill flex-gap">
+                    <mat-form-field appearance="fill" class="flex-fill">
+                        <mat-label>DEPARTAMENTO: </mat-label>
+                        <mat-select formControlName="departamento_id"  #v_depto (selectionChange)="depto(v_depto.value)">
+                            <mat-option *ngFor="let obj of departamento" [value]="obj.id">{{ obj.descripcion
+                                }}</mat-option>
+                        </mat-select>
+
+                        <mat-error *ngIf="Form.get('departamento_id').hasError('required')">Este campo es
+                            obligatorio</mat-error>
+                    </mat-form-field>
+                </div>    
+                <div class="flex-row flex-xs-column flex-fill flex-gap">
+                    <mat-form-field appearance="fill" class="flex-fill">
+                        <mat-label>SUB TEMA: </mat-label>
+                        <mat-select formControlName="catalogo_subtema_id">
+                            <mat-option *ngFor="let obj of subtema" [value]="obj.id">{{ obj.descripcion }}</mat-option>
+                        </mat-select>
+
+                        <mat-error *ngIf="Form.get('catalogo_subtema_id').hasError('required')">Este campo es
+                            obligatorio</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="flex-row flex-xs-column flex-fill flex-gap">    
+                    <mat-form-field appearance="fill" class="flex-fill">
+                        <mat-label>DESCRIPCIÓN: </mat-label>
+                        <input type="text" matInput autocomplete="off" formControlName="descripcion"
+                            placeholder="DESCRIPCIÓN" required cdkFocusInitial>
+                        <mat-error *ngIf="Form.get('descripcion').hasError('required')">Este campo es
+                            obligatorio</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="flex-row flex-xs-column flex-fill flex-gap">    
+                    <mat-form-field appearance="fill" class="flex-fill">
+                        <mat-label>SELECCIONA EL ARCHIVO</mat-label>
+                        <!-- This input is for display purposes, showing the selected file name -->
+                        <input matInput readonly type="text" (click)="fileInput.click()" [value]="selectedFileName">
+                        <mat-icon matSuffix>folder_open</mat-icon>
+
+                        <!-- This is the hidden native file input -->
+                        <input hidden type="file"  formControlName="archivo" #fileInput (change)="onFileSelected($event)" accept=".pdf,.doc,.docx">
+                    </mat-form-field>
+
+                </div>
+                <div class="flex-row flex-xs-column flex-fill flex-gap" *ngIf="ban_file">  
+                    <div class="informacion">
+                        <div class="item">
+                            <div class="title">NOMBRE:</div>
+                            <div class="data">{{ selectedFile.name }}</div>
+                        </div>
+                        <div class="item">
+                            <div class="title">TAMAÑO:</div>
+                            <div class="data">{{ selectedFile.size / 1048576 | number:'1.2'}} MB</div>
+                        </div>
+                    </div>  
+                </div>    
+            </mat-card>
+        </div>
+    </section>
+</section>
