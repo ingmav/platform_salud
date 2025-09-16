@@ -1,0 +1,39 @@
+
+<mat-toolbar *ngIf="Tipo == 2">
+    <span class="example-spacer"></span>
+    
+    <button mat-raised-button color="warn" (click)="cargarCierre()" style="margin-right: 10px;">
+        <mat-icon>sync</mat-icon>
+    ACTUALIZAR
+    
+    </button>
+
+</mat-toolbar>
+<div [chart]="chart"></div>
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8"  *ngIf="Tipo == 2">
+    <ng-container matColumnDef="distrito">
+       <th mat-header-cell *matHeaderCellDef> DISTRITO </th>
+       <td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
+     </ng-container>
+   
+     <!-- Name Column -->
+     <ng-container matColumnDef="abierto">
+       <th mat-header-cell *matHeaderCellDef> ABIERTA </th>
+       <td mat-cell *matCellDef="let element"> {{element.sin_envio_informacion}} </td>
+     </ng-container>
+   
+     <!-- Weight Column -->
+     <ng-container matColumnDef="cerrado">
+       <th mat-header-cell *matHeaderCellDef> CERRADA </th>
+       <td mat-cell *matCellDef="let element"> {{element.envio_informacion}} </td>
+     </ng-container>
+   
+     <!-- Symbol Column -->
+     <ng-container matColumnDef="diferencia">
+       <th mat-header-cell *matHeaderCellDef> TOTAL </th>
+       <td mat-cell *matCellDef="let element"> {{element.sin_envio_informacion + element.envio_informacion}} </td>
+     </ng-container>
+   
+     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+   </table>

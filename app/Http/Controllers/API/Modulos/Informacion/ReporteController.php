@@ -56,4 +56,25 @@ class ReporteController extends Controller
             throw new \App\Exceptions\LogError('Ocurrio un error al intentar obtener la lista de usuarios',0,$e);
         }
     }
+
+    /*public function Acumulado(Request $request){
+        try{
+            $loggedUser = auth()->userOrFail();
+
+            $parametros = $request->all();
+            
+            $obj = Departamento::select("descripcion", 
+            DB::RAW("(select count(*) from informacion where catalogo_subtema_id in 
+            (select id from catalogo_subtema where catalogo_departamento_id in (select id from catalogo_departamento a where a.id_padre=catalogo_departamento.id  and informacion.deleted_at is null)) and deleted_at is null) as cantidad"))
+            ->where("id", "!=",1)
+            ->whereRaw("id IN (SELECT id_padre FROM catalogo_departamento WHERE id_padre!=0)");
+            $obj = $obj->get();
+
+
+            
+            return response()->json(['data'=>$obj],HttpResponse::HTTP_OK);
+        }catch(\Exception $e){
+            throw new \App\Exceptions\LogError('Ocurrio un error al intentar obtener la lista de usuarios',0,$e);
+        }
+    }*/
 }

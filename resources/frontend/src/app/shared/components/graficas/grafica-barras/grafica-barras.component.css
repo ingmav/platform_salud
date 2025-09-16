@@ -1,0 +1,51 @@
+.contenedor {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    /* 5 columnas de 1 fracción cada una */
+    gap: 10px;
+    /* Espacio opcional entre los elementos */
+    /* height: 100vh; */
+    /* Opcional: para que ocupe toda la altura de la pantalla */
+}
+
+.espacio {
+
+    border: 1px solid #BFBFBF;
+    border-radius: 10px;
+}
+
+.titulo {
+    margin: 10px 0px 10px 0px;
+    font-size: 10pt;
+    text-align: center;
+    background-color: #cfcfcf;
+    border-radius: 3px;
+    padding: 5px;
+
+}
+
+.lineInfo {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    /* border-bottom: 1px dotted #afafaf; 
+    min-height: 30px;*/
+    border: 1px dotted #AFAFAF ;
+    margin: 5px;
+    padding: 5px;
+}
+
+.titleInfo
+{
+    align-items: center;
+}
+
+.titleInfo, .dateInfo
+{
+    font-size: 9pt;
+}
+
+.dateInfo
+{
+    text-align: center;
+}

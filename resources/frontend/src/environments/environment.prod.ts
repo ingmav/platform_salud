@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  base_url: '/plataforma/public/api',
-  images_url: '/images/'
+  base_url: '/api',
+  base_url_file: "/storage/"
 };

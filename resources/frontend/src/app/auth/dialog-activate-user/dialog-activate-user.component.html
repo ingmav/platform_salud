@@ -12,7 +12,7 @@
                         <mat-icon>{{showPassword ? 'visibility' : 'visibility_off'}}</mat-icon>
                     </button>
                     <mat-hint align="end">{{formPasswords.get('password').value.length || 0}}</mat-hint>
-                    <mat-error *ngIf="formPasswords.get('password').hasError('minlength')">Debe contener al menos 8 caracteres</mat-error>
+                    <mat-error *ngIf="formPasswords.get('password').hasError('minlength')">Debe contener al menos 5 caracteres</mat-error>
                     <mat-error *ngIf="formPasswords.get('password').hasError('required')">La Contraseña es obligatoria</mat-error>
                     <mat-error *ngIf="formPasswords.get('password').hasError('wrongPass')">Contraseña Incorrecta</mat-error>
                 </mat-form-field>

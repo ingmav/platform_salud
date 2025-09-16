@@ -1,0 +1,13 @@
+
+<mat-toolbar *ngIf="Tipo == 2">
+    <span class="example-spacer"></span>
+    
+    <button mat-raised-button color="warn" (click)="cargarInformacion()" style="margin-right: 10px;">
+        <mat-icon>sync</mat-icon>
+    ACTUALIZAR
+    
+    </button>
+
+</mat-toolbar>
+<div [chart]="chart">
+</div>
