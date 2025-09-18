@@ -28,7 +28,7 @@
     "angular-highcharts": "^17.0.1",
     "electron-updater": "^6.3.9",
     "file-saver": "^2.0.5",
-    "highcharts": "^12.2.0",
+    "highcharts": "^12.4.0",
     "highcharts-angular": "^4.0.1",
     "pdfmake": "^0.2.7",
     "rxjs": "~7.8.0",

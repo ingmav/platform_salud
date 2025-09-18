@@ -1,39 +1,4 @@
-
-<mat-toolbar>
-    <span class="example-spacer"></span>
-    
-    <button mat-raised-button color="warn" (click)="cargar()" style="margin-right: 10px;">
-        <mat-icon>sync</mat-icon>
-    ACTUALIZAR
-    
-    </button>
-
-    <button mat-raised-button color="primary" (click)="reporte()" [disabled]="isLoadingPDF">
-        <mat-icon>print</mat-icon>
-    REPORTE
-    <mat-progress-bar mode="indeterminate" *ngIf="isLoadingPDF"></mat-progress-bar>
-    </button>
-</mat-toolbar>
-<div class="encabezado">
-    <div class="call-center hide" >
-        <div class="titulo">CASILLAS ELECTORALES</div>
-    </div>
-    <div class="flex-fill"></div>
-    <div class="conteos">
-        <span>TOTAL DE CASILLAS</span> {{ total_casillas | number}}
-    </div>
-    <div class="conteos">
-        <span>CERRADAS</span> {{ casillas_cerradas | number}}
-    </div>
-    <div class="conteos acumulado">
-        <span>CERRADAS POR ALGÚN MOTIVO</span> {{ casilla_motivo | number}}
-    </div>
-    <div class="conteos acumulado">
-        <span>CASILLAS RESTANTES</span> {{ (total_casillas - casilla_motivo - casillas_cerradas) | number}}
-    </div>
-    <div class="conteos acumulado">
-        <span>TOTAL VOTOS</span> {{ (total_votos) | number}}
-    </div>
-   
+<div class="p-4">
+    <h2 class="text-xl mb-2">Ejemplo Drilldown</h2>
+    <div [chart]="chart"></div>
 </div>
-<div [chart]="chart"></div>

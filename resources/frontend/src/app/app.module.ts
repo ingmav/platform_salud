@@ -41,6 +41,7 @@ import { InformacionModule } from './modulos/informacion/informacion.module';
 import { DashboardModule } from './modulos/dashboard/dashboard.module';
 
 
+
 registerLocaleData(locale);
 
 @NgModule({

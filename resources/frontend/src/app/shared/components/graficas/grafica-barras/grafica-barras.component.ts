@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import * as Highcharts from 'highcharts';
 import { RestService } from 'src/app/shared/rest/rest.service';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { Chart, ChartModule, HIGHCHARTS_MODULES } from 'angular-highcharts';
+
+import * as Highcharts from 'highcharts';
 
 @Component({
   selector: 'app-grafica-barras',

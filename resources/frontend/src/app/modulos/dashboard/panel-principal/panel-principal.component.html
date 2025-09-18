@@ -1,2 +1,34 @@
-<app-grafica-barras [Title]="'ENVIO DE INFORMACIÓN GENERAL'" [SubTitle]="'FUENTE: INFORMACIÓN TABASCO'"
-    [yTitle]="'CANTIDAD DE INFORMACIÓN ENVIADA'" [API]="'acumulado-departamento'"></app-grafica-barras>
+<!-- <app-grafica-barras [Title]="'ENVIO DE INFORMACIÓN GENERAL'" [SubTitle]="'FUENTE: INFORMACIÓN TABASCO'"
+    [yTitle]="'CANTIDAD DE INFORMACIÓN ENVIADA'" [API]="'acumulado-departamento'"></app-grafica-barras> -->
+<mat-tab-group>
+    <mat-tab label="GRAFICAS">
+        
+        <div [chart]="chart"></div>
+        <div [chart]="chartAcumulado"></div>
+    </mat-tab>
+    <mat-tab label="ACTUALIZACIONES">
+        <div class="contenedor">
+            <div class="espacio" *ngFor="let item of dataDetalle">
+                <div class="titulo">
+                    {{ item.descripcion }}
+                </div>
+                <div class="data">
+                    <div *ngFor="let itemDetalle of item.sub_tema">
+                        <div class="lineInfo">
+                            <div class="titleInfo">
+                                {{ itemDetalle.descripcion}}
+                            </div>
+                            <div class="dateInfo" *ngIf="itemDetalle.informacion">
+                                {{ itemDetalle.informacion.user.name }}<BR>
+                                {{ itemDetalle.informacion.created_at | date:'dd - MMM - y'}}
+                            </div>
+                            <div class="dateInfo" *ngIf="!itemDetalle.informacion">
+                                NO ACTUALIZADO
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-tab>
+</mat-tab-group>
