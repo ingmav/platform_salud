@@ -114,6 +114,7 @@ export class DialogoUsuarioComponent implements OnInit, OnDestroy {
     this.formUsuario = this.formBuilder.group({
       'id':                         [''],
       'name':                       ['',Validators.required],
+      'is_superuser':               [''],
       'email':                      ['',[Validators.required, Validators.email]],
       'username':                   ['',[Validators.required, Validators.minLength(4)]],
       'catalogo_departamento_id':   ['',[Validators.required]],

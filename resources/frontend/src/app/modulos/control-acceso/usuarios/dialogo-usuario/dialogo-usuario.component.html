@@ -34,7 +34,7 @@
                 [disabled]="isLoading || isSaving || !formUsuario.valid || isSendingEmail">
                 <mat-icon>{{(changesDetected)?'save_as':'save'}}</mat-icon><span class="hide-xs">&nbsp;Guardar</span>
             </button>
-            
+
             <div class="flex-fill"></div>
             <div *ngIf="isRoot" class="root-access">
                 &LeftAngleBracket;&LeftAngleBracket; root &RightAngleBracket;&RightAngleBracket;
@@ -104,6 +104,7 @@
                         <mat-error *ngIf="formUsuario.get('username').hasError('duplicated')">El Nombre de Usuario esta
                             repetido</mat-error>
                     </mat-form-field>
+                    <mat-checkbox formControlName="is_superuser">SUPER USUARIO</mat-checkbox>
                     <div class="config-pass flex-fill" *ngIf="!inData.id && !configPass">
                         <div class="mensaje">Se enviará un correo de activación</div>
                     </div>
@@ -152,27 +153,33 @@
                         </mat-form-field>
                     </div>
                 </div>
-                <div class="flex-row flex-xs-column flex-fill flex-gap">   
+                <div class="flex-row flex-xs-column flex-fill flex-gap">
                     <div class="flex-row flex-fill" style="padding: 3px;">
                         <mat-form-field appearance="fill" class="flex-fill">
                             <mat-label>Departamento: </mat-label>
-                            <mat-select formControlName="catalogo_departamento_id" #depto (selectionChange)="select_detpo(depto.value)" >
-                                <mat-option *ngFor="let item of departamentos" [(value)]="item.id" style="line-height: 12px !important;">
+                            <mat-select formControlName="catalogo_departamento_id" #depto
+                                (selectionChange)="select_detpo(depto.value)">
+                                <mat-option *ngFor="let item of departamentos" [(value)]="item.id"
+                                    style="line-height: 12px !important;">
                                     {{ item.descripcion }}
                                     <div style="font-size: 9pt;">{{ item.departamento_padre.descripcion }}</div>
                                 </mat-option>
                             </mat-select>
-                            <mat-error *ngIf="formUsuario.get('catalogo_departamento_id').hasError('required')">Este campo es
+                            <mat-error *ngIf="formUsuario.get('catalogo_departamento_id').hasError('required')">Este
+                                campo es
                                 obligatorio</mat-error>
                         </mat-form-field>
                     </div>
                     <div class="flex-row flex-fill" style="padding: 3px;">
                         <mat-form-field appearance="fill" class="flex-fill">
                             <mat-label>Sub Tema: </mat-label>
-                            <mat-select formControlName="catalogo_subtema_id"  multiple>
-                                <mat-option *ngFor="let item of subtemas" #optionTema (click)="seleccionOpcion(optionTema.value)" [value]="item.id">{{item.descripcion}}</mat-option>
+                            <mat-select formControlName="catalogo_subtema_id" multiple>
+                                <mat-option *ngFor="let item of subtemas" #optionTema
+                                    (click)="seleccionOpcion(optionTema.value)"
+                                    [value]="item.id">{{item.descripcion}}</mat-option>
                             </mat-select>
-                            <mat-error *ngIf="formUsuario.get('catalogo_subtema_id').hasError('required')">Estes campo es  obligatorio</mat-error>
+                            <mat-error *ngIf="formUsuario.get('catalogo_subtema_id').hasError('required')">Estes campo
+                                es obligatorio</mat-error>
                         </mat-form-field>
                     </div>
                 </div>
@@ -194,7 +201,7 @@
                         </div>
                     </div>
                 </mat-tab>
-                
+
                 <mat-tab>
                     <ng-template mat-tab-label>
                         <mat-icon>face</mat-icon><span class="hide-xs">&nbsp;Avatar</span>

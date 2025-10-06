@@ -9,8 +9,10 @@ import { environment } from 'src/environments/environment';
 export class RestService {
 
   url = `${environment.base_url}/`;
-
+  private http_upload: HttpClient;
   constructor(private http: HttpClient) { }
+
+
 
   get(path, payload): Observable<any> {
     return this.http.get<any>(this.url + path, { params: payload }).pipe(
@@ -39,26 +41,53 @@ export class RestService {
 
   post_file(path: string, data: Record<string, any>, file: File): Observable<any> {
     
-    const formData = new FormData();
+    /*const formData = new FormData();
     let token = localStorage.getItem('token');
     let headers = new HttpHeaders();
 
-    headers.append('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8');
+    /*headers.append('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8');
     headers.append('Access-Control-Allow-Origin', '*');
     headers.append('Authorization', 'Bearer '+localStorage.getItem("token"));
     formData.append('token', token);
     formData.append('Content-Type', "multipart/form-data");
-
     formData.append('catalogo_subtema_id', data.catalogo_subtema_id);
     formData.append('descripcion', data.descripcion);
     formData.append('id', data.id);
-    if( file instanceof File)
+    formData.append('archivo', file, file.name);
+    /*if( file instanceof File)
     {
-      formData.append('archivo', file, file.name);
-    }
-    
+    }*/
+    /*const formData: FormData = new FormData();
 
-    return this.http.post<any>(this.url + path, formData, { headers: headers });
+    formData.append('archivo', file, file.name);
+
+
+    //let token = localStorage.getItem('token');
+    let headers = new HttpHeaders().set(
+      "Authorization",'Bearer '+localStorage.getItem("token"),
+    );
+    headers.append('Content-Type','application/x-www-form-urlencoded;charset=UTF-8');
+    headers.append('Access-Control-Allow-Origin','*');
+    formData.append('catalogo_subtema_id', data.catalogo_subtema_id);
+    formData.append('descripcion', data.descripcion);
+    formData.append('id', data.id);
+    formData.append('archivo', file, file.name);
+
+    return this.http.post<any>(this.url + path, formData, { headers: headers });*/
+    const formData: FormData = new FormData();
+
+    formData.append('archivo', file, file.name);
+    formData.append('catalogo_subtema_id', data.catalogo_subtema_id);
+    formData.append('descripcion', data.descripcion);
+    formData.append('id', data.id);
+
+    //let token = localStorage.getItem('token');
+    // let headers = new HttpHeaders().set(
+    //   "Authorization",'Bearer '+localStorage.getItem("token"),
+    // );
+    //headers.append('Content-Type','application/x-www-form-urlencoded;charset=UTF-8');
+    //headers.append('Access-Control-Allow-Origin','*');
+    return this.http.post(this.url + path, formData);
    
   }
 

@@ -17,20 +17,14 @@ export class TokenInterceptor implements HttpInterceptor {
 
     const token: string = this.authService.getToken();
 
-    if (request.body instanceof FormData) {
-      request = request.clone({
+    if (token) {
+      const cloned = request.clone({
         setHeaders: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`
         }
       });
-      return next.handle(request);
+      return next.handle(cloned);
     }
-    request = request.clone({
-      setHeaders: {
-        'Authorization': `Bearer ${token}`,
-        'Content-type': 'application/json',
-      }
-    });
     return next.handle(request);
   }
 }
@@ -104,12 +98,12 @@ export class ErrorInterceptor implements HttpInterceptor {
       return request;
     }
 
-    // We clone the request, because the original request is immutable
     return request.clone({
       setHeaders: {
         'Authorization': `Bearer ${accessToken}`,
-        'Content-type': 'application/json'
+        
       }
     });
+
   }
 }

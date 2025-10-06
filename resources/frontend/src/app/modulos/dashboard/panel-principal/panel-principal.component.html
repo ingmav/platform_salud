@@ -2,9 +2,9 @@
     [yTitle]="'CANTIDAD DE INFORMACIÓN ENVIADA'" [API]="'acumulado-departamento'"></app-grafica-barras> -->
 <mat-tab-group>
     <mat-tab label="GRAFICAS">
+        <div #chartContainer></div>
+        <div #chartDetalle></div>
         
-        <div [chart]="chart"></div>
-        <div [chart]="chartAcumulado"></div>
     </mat-tab>
     <mat-tab label="ACTUALIZACIONES">
         <div class="contenedor">

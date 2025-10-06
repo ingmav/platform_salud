@@ -5,10 +5,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Informacion\Departamento;
 use App\Models\Informacion\Informacion;
 use App\Models\Informacion\SubTema;
+use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
 use Validator;
+use Illuminate\Support\Facades\Storage;
 
 class InformacionController extends Controller
 {
@@ -18,7 +20,7 @@ class InformacionController extends Controller
             $loggedUser = auth()->userOrFail();
 
             $parametros = $request->all();
-            $obj        = Informacion::with("subTema.departamento", "user");
+            $obj = Informacion::with("subTema.departamento", "user");
 
             if ($loggedUser->is_superuser != 1) {
                 $obj->whereRaw("catalogo_subtema_id in (select catalogo_subtema_id from rel_user_subtema where user_id=" . $loggedUser->id . ")");
@@ -26,7 +28,7 @@ class InformacionController extends Controller
 
             if (isset($parametros['query']) && $parametros['query']) {
                 $obj = $obj->where(function ($query) use ($parametros) {
-                    return $query->where('descripcion', 'LIKE', '%' . $parametros['query'] . '%');
+                    return $query->where('nombre_archivo', 'LIKE', '%' . $parametros['query'] . '%');
                 });
             }
 
@@ -52,18 +54,20 @@ class InformacionController extends Controller
 
     public function Store(Request $request)
     {
+
+
         ini_set('memory_limit', '-1');
 
         $mensajes = [
 
             'required' => "required",
-            'email'    => "email",
-            'unique'   => "unique",
+            'email' => "email",
+            'unique' => "unique",
         ];
         $inputs = $request->all();
         $reglas = [
-            'catalogo_subtema_id' => 'required',
-            'descripcion'         => 'required',
+            //'catalogo_subtema_id' => 'required',
+            //'descripcion'         => 'required',
         ];
 
         try {
@@ -71,39 +75,41 @@ class InformacionController extends Controller
 
             //$parametros = $parametros['params'];
             $resultado = Validator::make($inputs, $reglas, $mensajes);
-            
-            \Storage::makeDirectory("public\informacion");
+            if (!$request->hasFile('archivo')) {
+                dd("sin archivo");
+            }
+            \Storage::makeDirectory("public//informacion");
             if ($resultado->passes()) {
                 $usuario = auth()->userOrFail();
-                if ((int)$inputs['id'] != 0) {
+                if ((int) $inputs['id'] != 0) {
                     $obj = Informacion::find($inputs['id']);
                 } else {
                     $obj = new Informacion();
-                    $obj->user_id             = $usuario->id;
+                    $obj->user_id = $usuario->id;
                 }
 
                 DB::beginTransaction();
 
                 if ($request->hasFile('archivo')) {
+                    $registro = New Carbon();
                     $file = $request->File('archivo');
-
                     $extension = $file->getClientOriginalExtension();
-                    $fileName = $obj->id;
-                    $name     = $fileName . "." . $extension;
-                    $request->file("archivo")->storeAs("public/informacion", $obj->id . "." . $obj->extension);
-                    $tamano    = $file->getSize();
-                    $type      = $file->getClientMimeType();
+                    $tamano = $file->getSize();
+                    $type = $file->getClientMimeType();
                     $obj->peso = ($tamano / 1000000);
                     $obj->type = $type;
-                    $obj->extension           = $extension;
+                    $obj->extension = $extension;
+                    $obj->catalogo_subtema_id = strtoupper($inputs['catalogo_subtema_id']);
+                    $obj->nombre_archivo = strtoupper($inputs['descripcion']);
+                    $obj->registro = $registro->format("Y-m-d");
+
                     $obj->save();
 
+                    $fileName = $obj->id;
+                    $name = $fileName . "." . $extension;
+                    $request->file('archivo')->storeAs('public//informacion', $name);
+
                 }
-
-                $obj->catalogo_subtema_id = strtoupper($inputs['catalogo_subtema_id']);
-                $obj->nombre_archivo      = strtoupper($inputs['descripcion']);
-
-                $obj->save();
 
                 DB::commit();
 
@@ -130,7 +136,7 @@ class InformacionController extends Controller
         }
     }
 
-    public function DownloadRequest($reques, $id)
+    public function Download(Request $request, $id)
     {
 
         ini_set('memory_limit', '-1');
@@ -154,6 +160,8 @@ class InformacionController extends Controller
                     ->join("rel_user_subtema", "rel_user_subtema.catalogo_subtema_id", "catalogo_subtema.id")
                     ->where("rel_user_subtema.user_id", $loggedUser->id)
                     ->where("catalogo_departamento.seleccionable", 1)
+                    ->select("catalogo_departamento.id", "catalogo_departamento.descripcion")
+                    ->groupBy("catalogo_departamento.id")
                     ->get();
             }
             return response()->json(['data' => $depto], HttpResponse::HTTP_OK);
@@ -169,12 +177,14 @@ class InformacionController extends Controller
             $loggedUser = auth()->userOrFail();
 
             if ($loggedUser->is_superuser == 1) {
-                $subTema = SubTema::where("catalogo_subtema.catalogo_departamento_id", $parametros['params'])
+                $subTema = SubTema::where("catalogo_subtema.catalogo_departamento_id", $parametros['params'])->groupBy("catalogo_subtema.id")
                     ->get();
             } else {
                 $subTema = SubTema::join("rel_user_subtema", "rel_user_subtema.catalogo_subtema_id", "catalogo_subtema.id")
                     ->where("rel_user_subtema.user_id", $loggedUser->id)
                     ->where("catalogo_subtema.catalogo_departamento_id", $parametros['params'])
+                    ->groupBy("catalogo_subtema.id")
+                    ->select("catalogo_subtema.id", "catalogo_subtema.descripcion")
                     ->get();
             }
 

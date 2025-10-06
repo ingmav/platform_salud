@@ -89,16 +89,21 @@ export class AddInformacionComponent implements OnInit {
   }
   guardar() {
    
+    this.isSaving = true;
       this.rest.post_file("informacion", this.Form.value, this.selectedFile).subscribe(
         {
-          next: (response) => { },
-          error: (response) => { }
+          next: (response) => {
+            this.cerrar();
+           },
+          error: (response) => {
+            this.isSaving = false;
+           }
         }
       );
   }
 
   ngOnInit(): void {
-    console.log("->", this.inData);
+    console.log(this.inData);
     this.changesDetected = false;
     this.Form = this.formBuilder.group({
       'id': [''],
@@ -109,7 +114,7 @@ export class AddInformacionComponent implements OnInit {
 
     });
 
-    if (this.inData) {
+    if (this.inData.sub_tema) {
       this.departamento = this.inData.catalogos;
       this.Form.patchValue({ id: this.inData.id, departamento_id: this.inData.sub_tema.catalogo_departamento_id });
       this.depto(this.inData.sub_tema.catalogo_departamento_id);
@@ -128,7 +133,6 @@ export class AddInformacionComponent implements OnInit {
       this.selectedFile = inputElement.files[0];
       this.selectedFileName = this.selectedFile.name;
       // You can now perform actions with the selected file, e.g., upload it
-      //console.log('Selected file:', this.selectedFile);
       this.ban_file = true;
     } else {
       this.ban_file = false;

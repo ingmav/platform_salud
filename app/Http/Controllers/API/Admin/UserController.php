@@ -215,10 +215,12 @@ class UserController extends Controller{
                             $user_data['status'] = $parametros['status'];
                         }
                     }
-
+                    
+                    $user_data['is_superuser'] = ($parametros['is_superuser'])?1:0;
                     $usuario->update($user_data);
                 }else{
                     $user_data['status'] = 1;
+                    $user_data['is_superuser'] = ($parametros['is_superuser'])?1:0;
                     if($parametros['mail_password']){
                         //$password_temp = Str::random(8);
                         //$user_data['password'] = Hash::make($password_temp);

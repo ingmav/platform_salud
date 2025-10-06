@@ -1,17 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import * as Highcharts from 'highcharts';
+import 'highcharts/modules/drilldown';
+import 'highcharts/modules/exporting';
+import { Options, SeriesOptionsType } from 'highcharts';
 import { RestService } from 'src/app/shared/rest/rest.service';
-import { Chart } from 'angular-highcharts';
-import * as Highcharts from 'highcharts/highstock';
-
-import HC_stock from 'highcharts/modules/stock';
 
 @Component({
-  selector: 'app-panel-principal',
-
+  selector: 'app-root',
   templateUrl: './panel-principal.component.html',
-  styleUrl: './panel-principal.component.css'
+  styleUrl: './panel-principal.component.css',
 })
-export class PanelPrincipalComponent {
+export class PanelPrincipalComponent implements AfterViewInit {
+  @ViewChild('chartContainer', { static: false }) chartContainer!: ElementRef;
+  @ViewChild('chartDetalle', { static: false }) chartDetalle!: ElementRef;
+  loading = true;
 
   chart: any;
   chartAcumulado: any;
@@ -28,19 +30,18 @@ export class PanelPrincipalComponent {
   SubTitle: string = "FUENTE: INFORMACIÓN TABASCO";
   API: String = "acumulado-departamento";
   yTitle: string = "CANTIDAD DE INFORMACIÓN ENVIADA";
- 
+
   constructor(private rest: RestService) { }
-  ngOnInit(): void {
-    
+
+  ngAfterViewInit(): void {
+    // Simula llamada a API con delay
+    setTimeout(() => {
+      this.cargarData();
+      this.loading = false;
+    });
   }
 
-  ngAfterViewInit() {
-    this.cargarData();
-
-  }
   cargarData() {
-
-    
     return this.rest.get(this.API, {}).subscribe({
       next: (response: any) => {
         let datos = { categorias: [], data: [] };
@@ -55,27 +56,83 @@ export class PanelPrincipalComponent {
 
         let detalle = response.detalle;
         let obj_drill: any = [];
+        
         detalle.forEach(element => {
           if (parseInt(element.mes) > 0) {
             let index = this.datosDetalle[0].data.findIndex(x => x.name == this.meses[element.mes] + " " + element.anio);
             if (index == -1) {
               this.datosDetalle[0].data.push({ name: this.meses[element.mes] + " " + element.anio, y: element.cantidad, drilldown: this.meses[element.mes] + " " + element.anio });
+              obj_drill.push(
+                {
+                  name: this.meses[element.mes] + " " + element.anio, id: this.meses[element.mes] + " " + element.anio, type: "column",
+                  data: [{ type: "column", name: element.registro, drilldown: element.registro, y: parseInt(element.cantidad) }]
+                });
 
-              obj_drill.push({ name: this.meses[element.mes] + " " + element.anio, id: this.meses[element.mes] + " " + element.anio, type: "column", data: [{ type: "column", name: element.registro, y: element.cantidad }] });
-
+              obj_drill.push(
+                {
+                  name: element.registro, id: element.registro, type: "column",
+                  data: [{ type: "column", name: element.departamento, drilldown: element.registro+" "+element.departamento, y: parseInt(element.cantidad) }]
+                });
+              
+                //console.log(element.departamento, element.subtema, element.cantidad);
+                obj_drill.push(
+                {
+                  name: element.departamento, id: element.registro+" "+element.departamento, type: "column",
+                  data: [{ type: "column", name: element.subtema, y: parseInt(element.cantidad) }]
+                });
             } else {
               this.datosDetalle[0].data[index].y += parseInt(element.cantidad);
               /** Segundo nivel */
-              //let index_niv_2 = this.obj_drill[0].data.findIndex(x => x.name == this.meses[element.mes] + " " + element.anio);
+
+              let index_niv_2 = obj_drill.findIndex(x => x.name == this.meses[element.mes] + " " + element.anio);
+              if (index_niv_2 != -1) {
+                let index_2 = obj_drill[index_niv_2].data.findIndex(x => x.name == element.registro);
+                if (index_2 != -1) {
+                  obj_drill[index_niv_2].data[index_2].y += parseInt(element.cantidad);
+                } else {
+                  obj_drill[index_niv_2].data.push({ type: "column", name: element.registro, y: parseInt(element.cantidad), drilldown: element.registro });
+                }
+              }
+
+              let index_3 = obj_drill.findIndex(x => x.id == element.registro);
+              if (index_3 != -1) {
+                let index_4 = obj_drill[index_3].data.findIndex(x => name == element.departamento);
+                if (index_4 != -1) {
+                  obj_drill[index_3].data[index_4].y += parseInt(element.cantidad);
+                } else {
+                  obj_drill[index_3].data.push({ type: "column", name: element.departamento, drilldown: element.registro+" "+element.departamento, y: parseInt(element.cantidad) });
+                }
+              } else {
+                obj_drill.push(
+                  {
+                    name: element.registro, id: element.registro, type: "column",
+                    data: [{ type: "column", name: element.departamento, drilldown: element.registro+" "+element.departamento, y: parseInt(element.cantidad) }]
+                  });
+              }
+              
+              let index_5 = obj_drill.findIndex(x => x.id == element.registro+" "+element.departamento);
+              if (index_5 != -1) {
+                let index_6 = obj_drill[index_5].data.findIndex(x => name == element.subtema);
+                if (index_6 != -1) {
+                  obj_drill[index_5].data[index_6].y += parseInt(element.cantidad);
+                } else {
+                  obj_drill[index_5].data.push({ type: "column", name: element.subtema, y: parseInt(element.cantidad) });
+                }
+              } else {
+                obj_drill.push(
+                  {
+                    name: element.departamento, id: element.registro+" "+element.departamento, type: "column",
+                    data: [{ type: "column", name: element.subtema, y: parseInt(element.cantidad) }]
+                  });
+              }
+
+
             }
-
           }
-
-
         });
-
-        this.cargarGrafico(datos);
-        this.cargarGraficoAcumulado(this.datosDetalle);
+        
+         this.cargarGrafico(datos);
+         this.cargarGraficoAcumulado(this.datosDetalle, obj_drill);
 
         this.dataDetalle = response.ultimo;
       }
@@ -83,7 +140,7 @@ export class PanelPrincipalComponent {
   }
 
   cargarGrafico(obj) {
-    this.chart = new Chart({
+    this.chart = Highcharts.chart(this.chartContainer.nativeElement, {
       chart:
       {
         type: 'column'
@@ -115,7 +172,7 @@ export class PanelPrincipalComponent {
     });
   }
   cargarGraficoAcumulado(obj, drill?) {
-    this.chartAcumulado = new Chart({
+    this.chartAcumulado = Highcharts.chart(this.chartDetalle.nativeElement, {
       chart:
       {
         type: 'column'
@@ -150,11 +207,56 @@ export class PanelPrincipalComponent {
         pointFormat: '<span style="color:{point.color}">{point.name}</span>: ' +
           '<b>{point.y:.0f}</b><br/>'
       },
-      series: 
+      series:
         obj,
-        drilldown:
-        drill
+      drilldown: {
+        series: drill
+        // series: [{
+        //   id: 'animals',
+        //   type: "column",
+        //   data: [
+        //       { name: 'Cats2', y: 4, drilldown:"prueba" },
+        //       { name: 'dog2', y: 4, drilldown:"prueb2" },
+        //   ]
+        // }, {
+        //   id: 'ABRIL 2025',
+        //   type: "column",
+        //   data: [
+        //     {
+        //       name:"2025-10-09",
+        //       drilldown:"2025-10-09",
+        //       y:10
+        //     }
+        //   ]
+        // }, {
+        //   id: '2025-10-09',
+        //   name:"PARENTAL",
+        //   type: "column",
+        //   data: [
+        //     {
+        //       name:"PARENTAL",
+        //       drilldown:"PARENTAL CONOCIDO",
+        //       y:5
+        //     }
+        //   ]
+        // }, {
+        //   id: 'PARENTAL CONOCIDO',
+        //   name:"PARENTAL X",
+        //   type: "column",
+        //   data: [
+        //     {
+        //       name:"PARENTAL X",
+        //       y:3
+        //     }
+        //   ]
+        // }]
+      }
+
+      // drilldown:
+      //   []
 
     });
   }
+
+
 }

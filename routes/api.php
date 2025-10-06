@@ -13,6 +13,9 @@ use Illuminate\Http\Response as HttpResponse;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+
+
 Route::group([
     'middleware' => 'api',
     'prefix' => 'auth'

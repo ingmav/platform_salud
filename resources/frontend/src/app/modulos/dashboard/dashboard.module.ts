@@ -6,14 +6,12 @@ import { PanelPrincipalComponent } from './panel-principal/panel-principal.compo
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ChartModule } from 'angular-highcharts';
 
-import { HighchartsChartModule } from 'highcharts-angular';
 @NgModule({
   declarations: [PanelPrincipalComponent],
   imports: [
     CommonModule,
     SharedModule,
     ChartModule,
-    HighchartsChartModule,
     DashboardRoutingModule
   ]
 })
