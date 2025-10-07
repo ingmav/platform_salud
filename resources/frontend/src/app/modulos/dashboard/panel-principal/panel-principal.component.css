@@ -49,3 +49,25 @@
 {
     text-align: center;
 }
+
+
+.bajo
+{
+    background-color: rgba(0, 192, 0, 0.8);
+}
+
+.medio
+{
+    background-color: rgba(255, 255, 0,0.8);
+}
+
+.alto
+{
+    background-color: rgba(255, 0,0,1);
+    color:white
+}
+
+.normal
+{
+
+}

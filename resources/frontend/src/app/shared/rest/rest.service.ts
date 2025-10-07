@@ -79,6 +79,7 @@ export class RestService {
     formData.append('archivo', file, file.name);
     formData.append('catalogo_subtema_id', data.catalogo_subtema_id);
     formData.append('descripcion', data.descripcion);
+    formData.append('semaforo', data.semaforo);
     formData.append('id', data.id);
 
     //let token = localStorage.getItem('token');

@@ -60,6 +60,12 @@ export class AddInformacionComponent implements OnInit {
   selectedFile: File | null = null;
   selectedFileName: string = '';
   ban_file: boolean = false;
+  semaforo:any = [
+    {id:0, descripcion:"NO APLICA"}, 
+    {id:1, descripcion:"RIESGO BAJO"}, 
+    {id:2, descripcion:"RIESGO MEDIO"} ,
+    {id:3, descripcion:"RIESGO ALTO"} 
+  ]
   displayNameMap = new Map([
     [Breakpoints.XSmall, 'xs'],
     [Breakpoints.Small, 'sm'],
@@ -110,6 +116,7 @@ export class AddInformacionComponent implements OnInit {
       'departamento_id': ['', Validators.required],
       'catalogo_subtema_id': ['', Validators.required],
       'descripcion': ['', Validators.required],
+      'semaforo': [''],
       'archivo': [''],
 
     });

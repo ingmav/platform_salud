@@ -102,6 +102,7 @@ class InformacionController extends Controller
                     $obj->catalogo_subtema_id = strtoupper($inputs['catalogo_subtema_id']);
                     $obj->nombre_archivo = strtoupper($inputs['descripcion']);
                     $obj->registro = $registro->format("Y-m-d");
+                    $obj->semaforo = $inputs['semaforo'];
 
                     $obj->save();
 

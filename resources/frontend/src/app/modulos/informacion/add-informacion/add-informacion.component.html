@@ -68,6 +68,15 @@
                 </div>
                 <div class="flex-row flex-xs-column flex-fill flex-gap">    
                     <mat-form-field appearance="fill" class="flex-fill">
+                        <mat-label>SEMAFORO: </mat-label>
+                        <mat-select formControlName="semaforo">
+                            <mat-option *ngFor="let obj of semaforo" [value]="obj.id">{{ obj.descripcion }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                
+                <div class="flex-row flex-xs-column flex-fill flex-gap">    
+                    <mat-form-field appearance="fill" class="flex-fill">
                         <mat-label>SELECCIONA EL ARCHIVO</mat-label>
                         <!-- This input is for display purposes, showing the selected file name -->
                         <input matInput readonly type="text" (click)="fileInput.click()" [value]="selectedFileName">

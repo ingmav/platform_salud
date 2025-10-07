@@ -18,7 +18,11 @@
                             <div class="titleInfo">
                                 {{ itemDetalle.descripcion}}
                             </div>
-                            <div class="dateInfo" *ngIf="itemDetalle.informacion">
+                            <div class="dateInfo" *ngIf="itemDetalle.informacion" [ngClass]="{
+                                'bajo': itemDetalle.informacion.semaforo === 1,
+                                'medio': itemDetalle.informacion.semaforo === 2,
+                                'alto': itemDetalle.informacion.semaforo === 3
+                                }">
                                 {{ itemDetalle.informacion.user.name }}<BR>
                                 {{ itemDetalle.informacion.created_at | date:'dd - MMM - y'}}
                             </div>
