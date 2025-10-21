@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { AlertPanelComponent } from 'src/app/shared/components/alert-panel/alert-panel.component';
 import { DialogConfirmActionComponent } from 'src/app/shared/components/dialog-confirm-action/dialog-confirm-action.component';
 import { ReportWorker } from 'src/app/web-workers/report-worker';
@@ -18,8 +17,7 @@ import { AddInformacionComponent } from '../add-informacion/add-informacion.comp
 })
 export class ListaInformacionComponent {
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-
+  
   @ViewChild(AlertPanelComponent) alertPanel: AlertPanelComponent;
 
   constructor(
@@ -58,12 +56,6 @@ export class ListaInformacionComponent {
   }
 
   ngAfterViewInit() {
-    // If the user changes the sort order, reset back to the first page.console.log('this.paginator.pageIndex = 0')
-    this.sort.sortChange.subscribe(() => {
-      this.paginator.pageIndex = 0;
-      this.applySearch();
-    });
-
     this.paginator.page.subscribe(() => {
       if (this.pageSize != this.paginator.pageSize) {
         this.paginator.pageIndex = 0;
@@ -80,9 +72,7 @@ export class ListaInformacionComponent {
   applySearch() {
     this.isLoadingResults = true;
     let params: any = {
-      sort: this.sort.active,
-      direction: this.sort.direction,
-      page: this.paginator.pageIndex + 1,
+       page: this.paginator.pageIndex + 1,
       per_page: this.paginator.pageSize,
       query: this.searchQuery,
     };
