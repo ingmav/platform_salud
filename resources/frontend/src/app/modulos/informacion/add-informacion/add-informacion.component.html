@@ -36,7 +36,7 @@
             <mat-card class="flex-column flex-gap xs-max-height-user-form" style="padding: 8px;" [formGroup]="Form">
                 <div class="flex-row flex-xs-column flex-fill flex-gap">
                     <mat-form-field appearance="fill" class="flex-fill">
-                        <mat-label>DEPARTAMENTO: </mat-label>
+                        <mat-label>PROGRAMA: </mat-label>
                         <mat-select formControlName="departamento_id"  #v_depto (selectionChange)="depto(v_depto.value)">
                             <mat-option *ngFor="let obj of departamento" [value]="obj.id">{{ obj.descripcion
                                 }}</mat-option>
@@ -48,7 +48,7 @@
                 </div>    
                 <div class="flex-row flex-xs-column flex-fill flex-gap">
                     <mat-form-field appearance="fill" class="flex-fill">
-                        <mat-label>SUB TEMA: </mat-label>
+                        <mat-label>DOCUMENTO: </mat-label>
                         <mat-select formControlName="catalogo_subtema_id">
                             <mat-option *ngFor="let obj of subtema" [value]="obj.id">{{ obj.descripcion }}</mat-option>
                         </mat-select>

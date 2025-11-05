@@ -13,7 +13,7 @@
     </mat-form-field>
 
     <button mat-raised-button color="primary" (click)="openDialogUser()"
-        [matTooltip]="'Nuevo Usuario'"><mat-icon>add</mat-icon></button>
+        [matTooltip]="'Nuevo'"><mat-icon>add</mat-icon></button>
 </div>
 
 <div>
@@ -33,7 +33,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="DEPARTAMENTO">
-                    <th mat-header-cell *matHeaderCellDef>DEPARTAMENTO</th>
+                    <th mat-header-cell *matHeaderCellDef>PROGRAMA</th>
                     <td mat-cell *matCellDef="let row">
                         {{row.sub_tema.descripcion}}
                         <div>{{ row.sub_tema.departamento.descripcion }}</div>
